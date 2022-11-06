@@ -1,0 +1,183 @@
+{% extends 'tp_admin/_base.html' %}
+
+{% block page_title %}
+    Edit Student | Name: {{ student.name }} | {{ student.matricule }} | <a href="{% url 'student_pdf_generate' student_id=student.id %}" target="_blank" class="btn btn-sm btn-success">Print</a>
+{% endblock page_title %}
+
+{% block content %}
+
+{% load static %}
+
+<section class="content">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Edit Student</h3>
+                    </div>
+                    <form role="form" method="POST" action="{% url 'edit_student_save' %}">
+                        {% csrf_token %}
+
+                        
+                                {% comment %} Display Messages {% endcomment %}
+                                {% if messages %}
+                                <div class="form-group">
+                                <div class="col-12">
+                                    {% for message in messages %}
+                                    {% if message.tags == "error" %}
+                                        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                        {{ message }}
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        </div>
+                                    {% elif message.tags == "success" %}
+                                        <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                        {{ message }}
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        </div>
+                                    {% endif %}
+                                    {% endfor %}
+                                </div>
+                                </div>
+                                {% endif %}
+                            
+
+                        <div class="card-body">
+
+                            <div class="form-group">
+                                <label> Name </label>
+                                <input type="text" class="form-control" name="name" value="{{ student.name }}">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Matricule </label>
+                                <input type="text" maxlength="8" class="form-control" id="id_matricule" name="matricule" value="{{ student.matricule }}">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Telephone </label>
+                                <input type="text" maxlength="9" class="form-control" id="id_telephone" name="telephone" value="{{ student.telephone }}">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Level </label>
+                                <select class="form-control" name="level">
+                                    {% for level in levels %}
+                                        <option value="{{ level.id }}"{% if level.id == student.level_id %} selected {% endif %}>{{ level.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Department </label>
+                                <select class="form-control" name="department">
+                                    {% for department in departments %}
+                                        <option value="{{ department.id }}"{% if department.id == student.department_id %} selected {% endif %}>{{ department.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Option </label>
+                                <select class="form-control" name="option">
+                                    {% for option in options %}
+                                        <option value="{{ option.id }}"{% if option.id == student.option_id %} selected {% endif %}>{{ option.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                          <div class="form-group">
+                                <label>TP School </label>
+                                <select class="form-control" name="school">
+                                    {% for school in schools %}
+                                        <option value="{{ school.id }}"{% if school.id == student.school_id %} selected {% endif %}>{{ school.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>TP School Department </label>
+                                <select class="form-control" name="school_dept">
+                                    {% for school_dept in school_depts %}
+                                        <option value="{{ school_dept.id }}"{% if school_dept.id == student.school_dept_id %} selected {% endif %}>{{ school_dept.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Academic Session </label>
+                                <select name="academic_session" disabled>
+                                    {% for academic_session in academic_sessions %}
+                                        <option value="{{ academic_session.id }}"{% if academic_session.id == student.academic_session_id %} selected {% endif %}>{{ academic_session.session_start_year }} - {{ academic_session.session_end_year }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="hidden" name="student_id" value="{{ student.id }}" />
+                            </div>
+
+                        </div>
+                        <!-- /.card-body -->
+
+                        <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">Update Student</button>
+                        </div>
+                    </form>
+
+                    </div>
+                    <!-- /.card -->
+
+                </div>
+            </div>
+
+        </div><!-- /.container-fluid -->
+      </section>
+
+  {% endblock content %}
+
+  {% block custom_js %}
+    {% comment %} Checking if matricule already exists or not usin Ajax {% endcomment %}
+
+  <script>
+        $(document).ready(function(){
+            // keyup event will be triggered when user leaves keyboard
+            $("#id_matricule").keyup(function(){
+                var matricule = $(this).val();
+
+                if(matricule!=""){
+                    $.ajax({
+                        url : '{% url 'check_matricule_exist' %}',
+                        type : 'POST',
+                        data : {matricule:matricule}
+                    })
+                    .done(function(response){
+                        //console.log(response);
+
+                        if(response == "True"){
+                            $(".matricule_error").remove();
+                            $("<span class='matricule_error' style='color: red; padding: 5px; font-style: italic;'> Matricule Number Already Exists. </span>").insertAfter("#id_matricule")
+                        }
+                        
+                    })
+
+                    .fail(function(){
+                        console.log("Failed");
+                    })
+                }
+                else{
+                    $(".matricule_error").remove();
+                }
+                
+            })
+
+        })
+    </script>
+
+  {% endblock custom_js %}

@@ -1,0 +1,5 @@
+/manage_option/ Department Column not displaying
+/manage_student/ Set target_blank for Add Student
+set is_authenticated on _base
+Admin profile update
+Fix numbering for model ID on admin

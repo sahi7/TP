@@ -1,0 +1,24 @@
+<!-- templates/registration/signup.html -->
+{% extends "tp_admin/_base.html" %}
+{% load crispy_forms_tags %}
+{% block title %}Sign Up{% endblock title %}
+{% block content %}
+<style type="text/css">
+	.add-admin-det{
+		margin: auto;
+		width: 95%;
+	}
+	h2{
+		padding-left: 10px;
+	}
+</style>
+<h2>Add Administrator</h2>
+</br>
+<div class="add-admin-det">
+<form method="post">
+	{% csrf_token %}
+	{{ form|crispy }}
+	<button class="btn btn-success" type="submit">Sign Up</button>
+</form>
+</div>
+{% endblock content %}

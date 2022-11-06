@@ -1,0 +1,23 @@
+body {
+min-height: 75rem;
+padding-top: 4.5rem;
+}
+h1 {
+color: red;
+}
+img.bookcover {
+height: 300px;
+width: auto;
+}
+#sub {
+    display: block;
+    width: 100%;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    color: #333;
+}
+
+#sub:focus {
+    outline: none;
+}

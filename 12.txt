@@ -1,0 +1,121 @@
+<form role="form" method="POST" action="{{ add_student_save }}" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {% comment %} Display Messages {% endcomment %}
+    {% if messages %}
+    <div class="form-group">
+    <div class="col-12">
+        {% for message in messages %}
+        {% if message.tags == "error" %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+        {% elif message.tags == "success" %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+    </div>
+    {% endif %}
+
+    <div class="card-body">
+        
+        {% comment %} Adding Form with All inputs Here {% endcomment %}
+
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-6 mt-md-0 mt-3">
+                </div>
+                <div class="col-md-6 mt-md-0 mt-3">
+                    <label>Name</label>
+                    <input type="text" class="form-control" name="name" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-6 mt-md-0 mt-3">
+                </div>
+                <div class="col-md-6 mt-md-0 mt-3">
+                    <label>Matricule</label>
+                    <input type="text" class="form-control" name="matricule" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Telephone</label>
+            <input type="text" class="form-control" name="telephone" placeholder="Enter Phone Number">
+        </div>
+
+        <div class="form-group">
+            <label>Department </label>
+            <select class="form-control" name="department">
+                {% for department in departments %}
+                    <option value="{{ department.id }}">{{ department.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Option </label>
+            <select class="form-control" name="option">
+                {% for option in options %}
+                    <option value="{{ option.id }}">{{ option.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Level </label>
+            <select class="form-control" name="level">
+                {% for level in levels %}
+                    <option value="{{ level.id }}">{{ level.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>TP School </label>
+            <select class="form-control" name="tp_school">
+                {% for tp_school in tp_schools %}
+                    <option value="{{ tp_school.id }}">{{ tp_school.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>TP School Department </label>
+            <select class="form-control" name="tp_school_dept">
+                {% for tp_school_dept in tp_school_depts %}
+                    <option value="{{ tp_school_dept.id }}">{{ tp_school_dept.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Academic Session </label>
+            <select class="form-control" name="academic_session">
+                {% for academic_session in academic_sessions %}
+                    <option value="{{ academic_session.id }}">{{ academic_session.session_start_year }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+    </div>
+    <!-- /.card-body -->
+
+    <div class="card-footer">
+    <button type="submit" class="btn btn-primary">Add Student</button>
+    </div>
+</form>

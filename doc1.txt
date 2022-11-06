@@ -1,0 +1,1 @@
+In Django workflow is different, It follows model view template (MVT), So you have to define a function in view.py in which you will mention your HTML template file_name, then you have to bind that function with your web app's URL using urls.py file, so when ever that particular URL will hits, it call views function process your logic and return data in your HTML file.
