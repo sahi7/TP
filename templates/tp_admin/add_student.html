@@ -1,0 +1,112 @@
+{% extends 'tp_admin/_base.html' %}
+
+{% block page_title %}
+    TP Registration | HTTTC Kumba
+{% endblock page_title %}
+
+{% block content %}
+
+{% load static %}
+
+<section class="content">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Register Student</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    {% url 'add_student_save' as action_path %}
+                    {% include 'tp_admin/form_template.html' with messages=messages form=form action_path=action_path button_text="Add Student" %}
+
+                    </div>
+                    <!-- /.card -->
+
+                </div>
+            </div>
+
+        </div><!-- /.container-fluid -->
+      </section>
+
+  {% endblock content %}
+
+  {% block custom_js %}
+    {% comment %} Checking if email and username already exists or not usin Ajax {% endcomment %}
+
+  <script>
+        $(document).ready(function(){
+            // keyup event will be triggered when user leaves keyboard
+            $("#id_matricule").keyup(function(){
+                var matricule = $(this).val();
+
+                if(matricule!=""){
+                    $.ajax({
+                        url : '{% url 'check_matricule_exist' %}',
+                        type : 'POST',
+                        data : {matricule:matricule}
+                    })
+                    .done(function(response){
+                        //console.log(response);
+
+                        if(response == "True"){
+                            $(".matricule_error").remove();
+                            $("<span class='matricule_error' style='color: red; padding: 5px; font-weight: bold;'> Matricule Number Already Registered. </span>").insertAfter("#id_matricule")
+                        }
+                        else{
+                            $(".matricule_error").remove();
+                            $("<span class='matricule_error' style='color: green; padding: 5px; font-weight: bold;'> Matricule Available. </span>").insertAfter("#id_matricule")
+                        }
+                    })
+
+                    .fail(function(){
+                        console.log("Failed");
+                    })
+                }
+                else{
+                    $(".matricule_error").remove();
+                }
+                
+            })
+
+            /////////////////////
+            $("#id_telephone").keyup(function(){
+                var telephone = $(this).val();
+
+                if(telephone!=""){
+                    $.ajax({
+                        url : '{% url 'validate_telephone' %}',
+                        type : 'POST',
+                        data : {telephone:telephone}
+                    })
+                    .done(function(response){
+                        //console.log(response);
+
+                        if(response == "True"){
+                            $(".phone_error").remove();
+                            $("<span class='phone_error' style='color: green; padding: 5px; font-weight: bold;'> Valid. </span>").insertAfter("#id_telephone")
+                            
+                        }
+                        else{
+                            $(".phone_error").remove();
+                            $("<span class='phone_error' style='color: red; padding: 5px; font-weight: bold;'> Invalid Phone Number. </span>").insertAfter("#id_telephone")
+                        }
+                    })
+
+                    .fail(function(){
+                        console.log("Failed");
+                    })
+                }
+                else{
+                    $(".phone_error").remove();
+                }
+                
+            })
+
+        })
+    </script>
+
+  {% endblock custom_js %}

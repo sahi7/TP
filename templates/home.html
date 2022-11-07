@@ -1,0 +1,320 @@
+{% extends '_base.html' %}
+
+{% block page_title %}
+    TP Registration | HTTTC Kumba
+{% endblock page_title %}
+
+{% block content %}
+
+{% load static %}
+
+<style type="text/css">
+    .content{
+      margin: auto;
+      width: 80%;
+    }
+    .form-group{
+      padding: 10px  0px 10px;
+    }
+    label{
+      font-weight: bold;
+    }
+    .header_below{
+      padding-top: 14px;
+      margin-top: 35px;
+      margin-bottom: 20px;
+    }
+    .alert-danger {
+      color: #fff;
+      background: #dc3545;
+      border-color: #d32535;
+    }
+    .alert-dismissible .close {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0.75rem 1.25rem;
+      }
+    button.close, button.mailbox-attachment-close {
+      background-color: transparent;
+    }
+    .alert .close{
+      color: #000;
+      opacity: 1;
+      border: none;
+}
+  </style>
+
+<section class="content">
+
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                    <div class="card-header">
+                      <div class="row">
+                        <div class="col-md-4">
+
+                          <div class="image">
+                            <img src="{% static 'dist/img/httclogo.png' %}" class="img-circle elevation-2" alt="HTTTC">
+                          </div>
+                        </div>
+                        <div class="col-md-4 offset-md-4">.
+                          <h3 class="card-title">Teaching Practice Registration</h3>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <section class="content">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                    <div class="card-header">
+                        <h5 class="card-title"><i style="padding-left: 20px;">Please FILL out the form bellow to complete your Teaching Practice Registration</i></h5>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form role="form" method="POST" action="{% url 'add_student_save' %}">
+                        {% csrf_token %}
+
+                        
+                                {% comment %} Display Messages {% endcomment %}
+                                {% if messages %}
+                                <div class="form-group">
+                                <div class="col-12">
+                                    {% for message in messages %}
+                                    {% if message.tags == "error" %}
+                                        <div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                        {{ message }}
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        </div>
+                                    {% elif message.tags == "success" %}
+                                        <div class="alert alert-success alert-dismissible fade show" role="alert" style="margin-top: 10px;">
+                                        {{ message }}
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        </div>
+                                    {% endif %}
+                                    {% endfor %}
+                                </div>
+                                </div>
+                                {% endif %}
+                            
+
+                        <div class="card-body">
+
+                            <div class="card-header header_below">
+                              <h5 class="card-title" aria-describedby="sinfotHelp"><i>Personal Information</i></h5>
+                              <small id="sinfotHelp" class="form-text text-muted">Enter your student information .</small>
+                            </div>
+
+                            <div class="form-group">
+                                <label> Name </label>
+                                <input type="text" class="form-control" name="name" placeholder="Enter Name">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Matricule </label>
+                                <input type="text" maxlength="8" class="form-control" name="matricule" id="id_matricule" placeholder="Enter Matricule" style="text-transform: uppercase;">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Telephone </label>
+                                <input type="text" maxlength="9" class="form-control" name="telephone" id="id_telephone" placeholder="Enter Phone No.">
+                            </div>
+
+                            <div class="form-group">
+                                <label>Level </label>
+                                <select class="form-control" name="level">
+                                    {% for level in levels %}
+                                        <option value="{{ level.id }}">{{ level.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Department </label>
+                                <select class="form-control" name="department" id="select1">
+                                    {% for department in departments %}
+                                        <option value="{{ department.id }}">{{ department.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Option </label>
+                                <select class="form-control" name="option" id="select2">
+                                    {% for option in options %}
+                                        <option value="{{ option.id }}" labels="{{ option.department_id }}">{{ option.name }} </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="card-header header_below">
+                              <h5 class="card-title" aria-describedby="pinfotHelp"><i>School Information</i></h5>
+                              <small id="pinfotHelp" class="form-text text-muted">Information about the school you would like to teach in.</small>
+                            </div>
+
+                          <div class="form-group">
+                                <label>TP School </label>
+                                <select class="form-control" name="school" id="select_school">
+                                    <option selected disabled=True>--Choose  School</option>
+                                    {% for school in schools %}
+                                        <option value="{{ school.id }}"{% if school.num_of_sudent == 1 %} disabled {% endif %}>{{ school.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>TP School Department </label>
+                                <select class="form-control" name="school_dept" id="select_school_dept">
+                                    <option selected disabled=True>--Choose Department</option>
+                                    {% for school_dept in school_depts %}
+                                        <option value="{{ school_dept.id }}" labels="{{ school_dept.school_id }}">{{ school_dept.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="form-group" style="visibility: hidden;">
+                                <label>Academic Session </label>
+                                <select name="academic_session">
+                                    {% for academic_session in academic_sessions %}
+                                        <option value="{{ academic_session.id }}">{{ academic_year}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                        </div>
+                        <!-- /.card-body -->
+
+                        <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">Register</button>
+                        </div>
+                    </form>
+                    </div>
+                    <!-- /.card -->
+
+                </div>
+            </div>
+
+        </div><!-- /.container-fluid -->
+</section>
+
+                    </div>
+                    <!-- /.card -->
+
+                </div>
+            </div>
+
+        </div><!-- /.container-fluid -->
+      </section>
+
+  {% endblock content %}
+
+  {% block custom_js %}
+    {% comment %} Checking if matricule already exists or not usin Ajax {% endcomment %}
+
+  <script>
+        
+        $(document).ready(function(){
+            // Dependent List
+            // Dependent selection for School and School Department
+            var $select1=$('#select1'),
+                $select2=$('#select2'),
+                $select_school=$('#select_school'),
+                $select_school_dept=$('#select_school_dept'),
+
+                $options=$select_school_dept.find('option');
+                $option_options=$select2.find('option');
+
+                $select_school.on('change', function(){
+                    $select_school_dept.html($options.filter('[labels="'+this.value+'"]'));
+                }).trigger('change');
+
+                $select1.on('change', function(){
+                    $select2.html($option_options.filter('[labels="'+this.value+'"]'));
+                }).trigger('change');
+
+            // Checking if matricule already exists
+            // keyup event will be triggered when user leaves keyboard
+            $("#id_matricule").keyup(function(){
+                var matricule = $(this).val();
+
+                if(matricule!=""){
+                    $.ajax({
+                        url : '{% url 'check_matricule_exist' %}',
+                        type : 'POST',
+                        data : {matricule:matricule}
+                    })
+                    .done(function(response){
+                        //console.log(response);
+
+                        if(response == "True"){
+                            $(".matricule_error").remove();
+                            $("<span class='matricule_error' style='color: red; padding: 5px; font-style: italic;'> Matricule Number Already Registered. </span>").insertAfter("#id_matricule")
+                        }
+                        else{
+                            $(".matricule_error").remove();
+                            $("<span class='matricule_error' style='color: green; padding: 5px; font-style: italic;'> Mat Available. </span>").insertAfter("#id_matricule")
+                        }
+                        
+                    })
+
+                    .fail(function(){
+                        console.log("Failed");
+                    })
+                }
+                else{
+                    $(".matricule_error").remove();
+                }
+                
+            })
+
+            /////////////////////
+            $("#id_telephone").keyup(function(){
+                var telephone = $(this).val();
+
+                if(telephone!=""){
+                    $.ajax({
+                        url : '{% url 'validate_telephone' %}',
+                        type : 'POST',
+                        data : {telephone:telephone}
+                    })
+                    .done(function(response){
+                        //console.log(response);
+
+                        if(response == "True"){
+                            $(".phone_error").remove();
+                            $("<span class='phone_error' style='color: green; padding: 5px; font-style: italic;'> Valid. </span>").insertAfter("#id_telephone")
+                            
+                        }
+                        else{
+                            $(".phone_error").remove();
+                            $("<span class='phone_error' style='color: red; padding: 5px; font-style: italic;'> Invalid Phone Number. </span>").insertAfter("#id_telephone")
+                        }
+                    })
+
+                    .fail(function(){
+                        console.log("Failed");
+                    })
+                }
+                else{
+                    $(".phone_error").remove();
+                }
+                
+            })
+
+        })
+    </script>
+
+  {% endblock custom_js %}

@@ -1,0 +1,90 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
+{% load static %}
+
+<style type="text/css">
+    .st-space, .header_below{
+        margin-top: 50px;
+    }
+    .sm-space{
+        margin-top: 20px;
+    }
+    .font-echo{
+        font-size: 12px;
+    }
+</style>
+
+
+<div class="container font-echo">
+  <!-- Columns start at 50% wide on mobile and bump up to 33.3% wide on desktop -->
+  <div class="row">
+    <div class="col-6 col-md-4">
+        <ul class="list-unstyled">
+          <li><b>REPUBLIC OF CAMEROON</b></li>
+          <li>Peace – Work – Fatherland</li>
+          <li><b>UNIVERSITY OF BUEA</b></li>
+          <li><strong>HIGHER TECHNICAL TEACHERS TRAINING COLLEGE </strong>(HTTTC)</li>
+          <li>Director: Prof. Akume Daniel Akume</li>
+          <li>Deputy Director: Prof. Ebune B. Joseph</li>
+          <li>Director of Studies: Dr. Evelyne Tegomoh</li>
+          <li>Secretary General: Prof. Lissouck Daniell</li>
+        </ul>
+    </div>
+    <div class="col-6 col-md-4" align="center">
+        <div class="image">
+            <img src="{% static 'dist/img/University-of-Buea.png' %}" class="img-circle elevation-2" alt="HTTTC">
+        </div>
+    </div>
+    <div class="col-6 col-md-4" align="right">
+        <ul class="list-unstyled">
+          <li><b>REPUBLIQUE DU CAMEROUN</b></li>
+          <li>Paix – Travail – Patrie</li>
+          <li><b>UNIVERSITE DE BUEA</b></li>
+          <li><strong>ECOLE NORMALE SUPERIEURE D’ENSEIGNEMENT TECHNIQUE </strong>(ENSET)</li>
+          <li>P.O. Box 249 Buea Road, Kumba,</li>
+          <li>South West Region, Cameroon</li>
+          <li>Tel: (+237)2 3335 4691 - Fax: (+237) 2 33354692</li>
+          <li>Email: info.htttc_kumba@ubuea.cm</li>
+        </ul>
+    </div>
+  </div>
+</div>
+<div class="st-space"></div>
+<div class="container">
+    <div class="card-header header_below" align="center">
+      <h5 class="card-title" aria-describedby="pinfotHelp">TEACHING PRACTICE REGISTRATION FORM</h5>
+      <small id="pinfotHelp" class="form-text text-muted"><i>You have successfully been registered for Teaching Practice with the following information.</i></small>
+    </div>
+    <div class="st-space"></div>
+    <div class="stdetails">
+        <p><strong>Name: </strong>{{ student.name }}</p>
+        <p><strong>Matricule: </strong> {{ student.matricule }}</p>
+        <p><strong>TP Code: </strong>{{ student.tp_code }}</p>
+        <p><strong>Level:</strong> {{ student.level.name }}</p>
+        <p><strong>Department:</strong> {{ student.department.name }} ({{ student.department.code }})</p>
+        <p><strong>Option:</strong> {{ student.option.name }}({{ student.option.code }})</p>
+
+        <p style="margin-bottom: 0px;"><strong>TP School: </strong>{{ student.school.name }} ({{ student.school.town }})</p>
+        <small class="fst-italic text-muted"> School where you will carry out TP</small>
+        <div class="sm-space"></div>
+        <p style="margin-bottom: 0px;"><strong>TP School Department: </strong>{{ student.school_dept.name }}</p>
+        <small class="fst-italic text-muted"> School Department for TP</small>
+    </div>
+    <p> You cannot re-register. If there are any mistakes on this form please see HOS office after downloading your registration form</p>
+    <a href="{% url 'student_pdf_generate' student_id=student.id %}" target="_blank" class="btn btn-sm btn-success">Download Form</a>
+</div>
+
+<div class="container">
+  <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+    <p class="col-md-4 mb-0 text-muted">See HOS for any corrections on this document</p>
+
+    <a href="/" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+      <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+    </a>
+
+    <ul class="nav col-md-4 justify-content-end">
+      <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Printed on {% now "SHORT_DATETIME_FORMAT" %}</a></li>
+      <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">© HTTTC Kumba</a></li>
+    </ul>
+  </footer>
+</div>
