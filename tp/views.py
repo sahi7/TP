@@ -79,8 +79,11 @@ def admin_home(request):
 
 
 def add_department(request):
-    
-    return render(request, "tp_admin/add_department.html")
+    levels = Level.objects.all()
+    context = {
+        "levels":levels
+    }
+    return render(request, "tp_admin/add_department.html", context)
 
 
 def add_department_save(request):
@@ -90,8 +93,9 @@ def add_department_save(request):
     else:
         department = request.POST.get('department')
         department_code = request.POST.get('code')
+        department_level = request.POST.get('level')
         try:
-            department_model = Department(name=department, code=department_code)
+            department_model = Department(name=department, code=department_code, level_id=department_level)
             department_model.save()
             messages.success(request, "Department Added Successfully!")
             return redirect('add_department')
@@ -110,9 +114,11 @@ def manage_department(request):
 
 def edit_department(request, department_id):
     department = Department.objects.get(id=department_id)
+    levels = Level.objects.all()
     context = {
         "department": department,
-        "id": department_id
+        "id": department_id,
+        "levels":levels
     }
     return render(request, 'tp_admin/edit_department.html', context)
 
@@ -124,11 +130,13 @@ def edit_department_save(request):
         department_id = request.POST.get('department_id')
         department_name = request.POST.get('department')
         department_code = request.POST.get('code')
+        department_level = request.POST.get('level')
 
         try:
             department = Department.objects.get(id=department_id)
             department.name = department_name
             department.code = department_code
+            department.level_id = department_level
             department.save()
 
             messages.success(request, "Department Updated Successfully.")
